@@ -45,7 +45,6 @@ git clone -c feature.manyFiles=true -c core.sharedRepository=true https://github
 pushd ${SPACK_DIR}
 git checkout ${SPACK_VERSION}
 popd
-chmod -fR 02770 ${SPACK_DIR} || true
 . ${SPACK_DIR}/share/spack/setup-env.sh
 
 exit 0
