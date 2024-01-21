@@ -13,6 +13,12 @@ popd
 # Initialize spack
 . spack/share/spack/setup-env.sh
 
+# Configure spack
+spack config add concretizer:unify:true
+spack config add concretizer:reuse:true
+spack config add config:db_lock_timeout:300
+spack config add config:install_tree:padded_length:128
+
 # Create and activate chiltepin environment
 spack env create chiltepin
 spack env activate chiltepin
