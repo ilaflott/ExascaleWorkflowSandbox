@@ -29,8 +29,8 @@ spack mirror list
 spack add python
 spack add py-pip
 spack add py-pytest
-spack add flux-core@0.53.0
-spack add flux-sched@0.28.0
+spack add flux-core@0.58.0
+spack add flux-sched@0.32.0
 spack add py-flake8
 spack add py-pytest-flake8
 
@@ -38,7 +38,8 @@ spack add py-pytest-flake8
 spack install --fail-fast --no-check-signature
 
 # Install parsl
-python -m pip install parsl[monitoring]==2023.12.4
+#python -m pip install parsl[monitoring]
+python -m pip install git+https://github.com/Parsl/parsl.git@mpi_experimental_3
 
 # Push the packages to the mirror
 if [ "$(spack mirror list | wc -l)" = "3" ]; then

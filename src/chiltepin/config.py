@@ -2,7 +2,7 @@ from parsl.config import Config
 from parsl.channels import LocalChannel
 from parsl.providers import SlurmProvider
 from parsl.executors import FluxExecutor, HighThroughputExecutor
-from parsl.launchers import SimpleLauncher
+from parsl.launchers import SimpleLauncher, SingleNodeLauncher
 
 import os
 import yaml
@@ -65,6 +65,29 @@ def factory(yaml_config={}):
                     account=pc["account"],
                     walltime="02:10:00",
                     launcher=SimpleLauncher(),
+                    worker_init="""
+                    """,
+                ),
+            )
+            execs.append(e)
+        if pc["type"] == "mpihtex":
+            e = HighThroughputExecutor(
+                label=pc["name"],
+                enable_mpi_mode=True,
+                mpi_launcher="srun",
+                # address=address_by_hostname(),
+                max_workers=pc["max mpi apps"],
+                cores_per_worker=1e-6,
+                provider=SlurmProvider(
+                    channel=LocalChannel(),
+                    exclusive=True,
+                    cores_per_node=pc["cores per node"],
+                    nodes_per_block=pc["nodes per block"],
+                    init_blocks=1,
+                    partition=pc["partition"],
+                    account=pc["account"],
+                    walltime="02:10:00",
+                    launcher=SingleNodeLauncher(),
                     worker_init="""
                     """,
                 ),
