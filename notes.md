@@ -12,7 +12,14 @@ chmod +x Miniforge3-Linux-x86_64.sh
 eval "$(/home/Ian.Laflotte/miniforge3/bin/conda shell.bash hook)"
 
 # init mamba
-. "/home/Ian.Laflotte/miniforge3/etc/profile.d/mamba.sh"	
+. "/home/Ian.Laflotte/miniforge3/etc/profile.d/mamba.sh"
+
+# point envs and pkgs dirs to location with larger quota
+echo "pkgs_dirs:"                                      >> /home/$USER/miniforge3/.condarc
+echo "  - /collab1/data/Ian.Laflotte/miniforge3/pkgs"  >> /home/$USER/miniforge3/.condarc
+echo "envs_dirs:"									   >> /home/$USER/miniforge3/.condarc
+echo "  - /collab1/data/Ian.Laflotte/miniforge3/envs"  >> /home/$USER/miniforge3/.condarc
+
 ```
 
 
@@ -23,7 +30,7 @@ eval "$(/home/Ian.Laflotte/miniforge3/bin/conda shell.bash hook)"
 install a preq or two, setup remote repo, first commit
 ```
 # create env
-mamba create -n ChiltepinEPMT_env python=3.9.15
+mamba create -n ChiltepinEPMT_env python=3.9.16
 
 # activate env
 mamba activate ChiltepinEPMT_env
