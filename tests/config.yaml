@@ -1,3 +1,36 @@
+niagara:
+  providers:
+    -
+      type: "flux"
+      name: "parallel"
+      cores per node: 1
+      nodes per block: 1
+      partition: "niagara"
+      account: "niagara"
+    -
+      type: "htex"
+      name: "service"
+      cores per node: 1
+      nodes per block: 1
+      partition: "niagara"
+      account: "niagara"
+#    -
+#      type: "htex"
+#      name: "serial"
+#      cores per node: 1
+#      nodes per block: 1
+#      partition: "niagara"
+#      account: "Ian.Laflotte"
+  
+  environment:
+    - "module purge"
+#    - "module load intel/2022.1.2"
+#    - "module load intel-tools/2023.2.0"
+#    - "module load intelpython/2023.2.0"
+#    - "module load jedi-fv3-env"
+#    - "unset I_MPI_PMI_LIBRARY"
+#    - "export CHILTEPIN_MPIF90=$MPIF90"
+
 hercules:
   providers:
     -

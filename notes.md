@@ -112,5 +112,65 @@ now we do a local install for tests at least...
 ```
 cd <repository root>
 pip install -e .
+```
+
+now try to run some tests... doesn't work at all!
+because there's no platform in `tests/config.yaml` to identify what modules to use.
+so i create a "niagara" platform in the config and do my best to point to what seems to be appropriate modules.
+then...
+```
+cd tests
+pytest --assert=plain --config=config.yaml --platform=niagara
+...
+...
+...
+FAILED test_uwtools.py::test_uwtools_install - subprocess.CalledProcessError: Command '['uw --version']' returned non-zero exit status 127.
+```
+
+
+alrighty, lets conda-install uwtools (DO NOT PIP INSTALL - useless scheduling tool for univ of washington...)
+```
+mamba install -c ufs-community -c conda-forge --override-channels uwtools
+```
+
+so the python interpreters got mixed up with which `rpds`, `referencing` and `jsonschema` packages to call...
+the ones in the python3.9 i put in the mamba/conda env? or the 3.10 in the spack-stack env? which to use?
+the mamba install call surprisingly put packages in the 3.10 env...
+```
+which python
+  /collab1/data/Ian.Laflotte/Working/ChiltepinEPMT/install/spack/var/spack/environments/chiltepin/.spack-env/view/bin/python
+which python3.9
+  /collab1/data/Ian.Laflotte/miniforge3/envs/ChiltepinEPMT_env/bin/python3.9
+python -m pip uninstall jsonschema referencing rpds-py
+python3.9 -m pip uninstall jsonschema referencing rpds-py #just in case...
+python3.9 -m pip install jsonschema referencing rpds-py
+
+#now hopefully the uwtools call works for that third pytest...
+uw --version
+  uw version 2.2.0 build 0
+```
+
+yay! next pytest call, i add a `-x` to exit on first error encountered...
+```
+pytest -x --assert=plain --config=config.yaml --platform=niagara
+
+
+collected 12 items                                 
+test_leadtime.py ..                                     [ 16%]
+test_parsl_flux_mpi_hello.py E
+
+config_file = 'config.yaml', platform = 'niagara'
+
+    @pytest.fixture(scope="module")
+    def config(config_file, platform):
+        yaml_config = chiltepin.configure.parse_file(config_file)
+        resources, environments = chiltepin.configure.factory(yaml_config, platform)
+        environment = environments[platform]
+>       with parsl.load(resources):
+E       AttributeError: __enter__
+
+test_parsl_flux_mpi_hello.py:92: AttributeError
 
 ```
+
+complaining about attribute `account` in config.yaml... set to empty... rerun
